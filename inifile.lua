@@ -1,5 +1,5 @@
 local inifile = {
-	_VERSION = "inifile 1.0",
+	_VERSION = "inifile 1.1",
 	_DESCRIPTION = "Inifile is a simple, complete ini parser for lua",
 	_URL = "https://github.com/bartbes/inifile",
 	_LICENSE = [[
@@ -44,10 +44,11 @@ local backends = {
 	},
 	memory = {
 		lines = function(text) return text:gmatch("([^\r\n]+)\r?\n") end,
-		write = function(name, contents) return contents end,
+		write = function(name, contents) return contents end,	-- luacheck: ignore name
 	},
 }
 
+-- luacheck: ignore love
 if love then
 	backends.love = {
 		lines = love.filesystem.lines,
@@ -131,7 +132,7 @@ function inifile.save(name, t, backend)
 	-- If there are comments before sections,
 	-- write them out now
 	if comments and comments[comments] then
-		for i, v in ipairs(comments[comments]) do
+		for _, v in ipairs(comments[comments]) do
 			table.insert(contents, (";%s"):format(v))
 		end
 		table.insert(contents, "")
@@ -163,7 +164,7 @@ function inifile.save(name, t, backend)
 		-- Write our comments out again, sadly we have only achieved
 		-- section-accuracy so far
 		if comments and comments[section] then
-			for i, v in ipairs(comments[section]) do
+			for _, v in ipairs(comments[section]) do
 				table.insert(contents, (";%s"):format(v))
 			end
 		end

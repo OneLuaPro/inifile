@@ -1,3 +1,4 @@
+-- run this test spec with busted inifile_spec.lua
 local inifile = require "inifile"
 
 local function parse(text)
